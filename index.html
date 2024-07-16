@@ -22,11 +22,11 @@
         }
         .container {
             background-color: rgba(52, 73, 94, 0.9);
-            padding: 30px;
+            padding: 50px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 400px;
+            max-width: 600px;
             width: 100%;
         }
         h1 {
@@ -70,7 +70,7 @@
             fetch('https://api.mcstatus.io/v2/status/java/games.gsbgol.de')
                 .then(response => response.json())
                 .then(data => {
-                    const { online, players, version, motd } = data;
+                    const { online, players, version, motd, latency, serverIcon } = data;
 
                     function parseMinecraftFormatting(text) {
                         const formattingCodes = {
@@ -93,10 +93,13 @@
                     }
 
                     if (online) {
+                        const iconImg = serverIcon ? `<img src="${serverIcon}" alt="Server Icon" style="width: 64px; height: 64px;">` : '';
                         serverStatus.innerHTML = `
+                            ${iconImg}
                             <p class="status-online">Server ist online!</p>
                             <p>Spieler online: ${players.online} / ${players.max}</p>
                             <p>Version: ${version.name}</p>
+                            <p>Ping: ${latency} ms</p>
                             <p class="motd">MOTD: <span>${parseMinecraftFormatting(motd.raw)}</span></p>
                         `;
                     } else {
