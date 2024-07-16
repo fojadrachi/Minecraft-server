@@ -42,7 +42,12 @@
             color: #e74c3c;
         }
         .motd {
-            font-style: italic;
+            background-color: #2c3e50;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            text-align: left;
+            display: inline-block;
         }
     </style>
 </head>
@@ -62,12 +67,29 @@
                 .then(data => {
                     const { online, players, version, motd } = data;
 
+                    function parseMinecraftFormatting(text) {
+                        const formattingCodes = {
+                            '0': 'color:#000000', '1': 'color:#0000AA', '2': 'color:#00AA00', '3': 'color:#00AAAA',
+                            '4': 'color:#AA0000', '5': 'color:#AA00AA', '6': 'color:#FFAA00', '7': 'color:#AAAAAA',
+                            '8': 'color:#555555', '9': 'color:#5555FF', 'a': 'color:#55FF55', 'b': 'color:#55FFFF',
+                            'c': 'color:#FF5555', 'd': 'color:#FF55FF', 'e': 'color:#FFFF55', 'f': 'color:#FFFFFF',
+                            'k': 'text-decoration:line-through', 'l': 'font-weight:bold', 'm': 'text-decoration:line-through',
+                            'n': 'text-decoration:underline', 'o': 'font-style:italic', 'r': ''
+                        };
+
+                        return text.replace(/§[0-9a-fklmnor]/g, match => {
+                            const code = match[1];
+                            const style = formattingCodes[code];
+                            return style ? `</span><span style="${style}">` : `</span><span>`;
+                        }) + '</span>';
+                    }
+
                     if (online) {
                         serverStatus.innerHTML = `
                             <p class="status-online">Server ist online!</p>
                             <p>Spieler online: ${players.online} / ${players.max}</p>
                             <p>Version: ${version.name}</p>
-                            <p class="motd">MOTD: ${motd.clean}</p>
+                            <p class="motd">MOTD: <span>${parseMinecraftFormatting(motd.raw)}</span></p>
                         `;
                     } else {
                         serverStatus.innerHTML = '<p class="status-offline">Server ist offline.</p>';
