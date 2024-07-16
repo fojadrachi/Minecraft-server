@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #server-status {
+            margin-top: 20px;
+        }
+        #server-status p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minecraft Server Status</h1>
+        <div id="server-status">
+            <p>Lade Server-Daten...</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const serverStatus = document.getElementById('server-status');
+
+            fetch('https://api.mcstatus.io/v2/status/java/games.gsbgol.de')
+                .then(response => response.json())
+                .then(data => {
+                    const { online, players, version } = data;
+
+                    if (online) {
+                        serverStatus.innerHTML = `
+                            <p>Server ist online!</p>
+                            <p>Spieler online: ${players.online} / ${players.max}</p>
+                            <p>Version: ${version.name}</p>
+                        `;
+                    } else {
+                        serverStatus.innerHTML = '<p>Server ist offline.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Fehler beim Abrufen der Server-Daten:', error);
+                    serverStatus.innerHTML = '<p>Fehler beim Abrufen der Server-Daten.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
