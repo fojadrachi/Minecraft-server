@@ -6,30 +6,43 @@
     <title>Minecraft Server Status</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #ecf0f1;
         }
         .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #34495e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             text-align: center;
+            max-width: 400px;
+            width: 100%;
         }
         h1 {
-            color: #333;
+            color: #ecf0f1;
+            margin-bottom: 20px;
         }
         #server-status {
             margin-top: 20px;
         }
         #server-status p {
-            margin: 0;
+            margin: 10px 0;
+        }
+        .status-online {
+            color: #2ecc71;
+        }
+        .status-offline {
+            color: #e74c3c;
+        }
+        .motd {
+            font-style: italic;
         }
     </style>
 </head>
@@ -47,16 +60,17 @@
             fetch('https://api.mcstatus.io/v2/status/java/games.gsbgol.de')
                 .then(response => response.json())
                 .then(data => {
-                    const { online, players, version } = data;
+                    const { online, players, version, motd } = data;
 
                     if (online) {
                         serverStatus.innerHTML = `
-                            <p>Server ist online!</p>
+                            <p class="status-online">Server ist online!</p>
                             <p>Spieler online: ${players.online} / ${players.max}</p>
                             <p>Version: ${version.name}</p>
+                            <p class="motd">MOTD: ${motd.clean}</p>
                         `;
                     } else {
-                        serverStatus.innerHTML = '<p>Server ist offline.</p>';
+                        serverStatus.innerHTML = '<p class="status-offline">Server ist offline.</p>';
                     }
                 })
                 .catch(error => {
