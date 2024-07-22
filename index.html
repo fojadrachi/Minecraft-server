@@ -11,13 +11,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #282c34;
-            color: white;
             margin: 0;
+            background-image: url('https://wallpaperaccess.com/full/3295832.jpg');
+            background-size: cover;
+            color: white;
         }
         .container {
             text-align: center;
-            background: #3a3f47;
+            background: rgba(58, 63, 71, 0.8);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -30,6 +31,9 @@
         }
         #server-status p {
             margin: 5px 0;
+        }
+        #status {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -54,13 +58,16 @@
                     if (data.online) {
                         document.getElementById('status').textContent = 'Online';
                         document.getElementById('players').textContent = `${data.players.now} / ${data.players.max}`;
+                        document.getElementById('status').style.color = 'limegreen';
                     } else {
                         document.getElementById('status').textContent = 'Offline';
                         document.getElementById('players').textContent = '0';
+                        document.getElementById('status').style.color = 'red';
                     }
                 } catch (error) {
                     document.getElementById('status').textContent = 'Error';
                     document.getElementById('players').textContent = '0';
+                    document.getElementById('status').style.color = 'orange';
                     console.error('Fehler beim Abrufen des Serverstatus:', error);
                 }
             }
